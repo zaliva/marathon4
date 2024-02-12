@@ -16,8 +16,16 @@ class ViewController: UIViewController {
     }
     
     @IBAction func shuffleAction(_ sender: Any) {
-        tasks.shuffle()
-        tableView.reloadData()
+        var indexPaths = (0..<tasks.count).map { IndexPath(row: $0, section: 0) }
+        indexPaths.shuffle()
+        
+        tasks = indexPaths.map { tasks[$0.row] }
+        
+        self.tableView.beginUpdates()
+        for (index, indexPath) in indexPaths.enumerated() {
+            self.tableView.moveRow(at: indexPath, to: IndexPath(row: index, section: 0))
+        }
+        self.tableView.endUpdates()
     }
 }
 
